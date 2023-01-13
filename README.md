@@ -1,4 +1,4 @@
-# Belly Button Biodiversity challenge (in progress)
+# Belly Button Biodiversity challenge
 In this project, I will be building an interactive dashboard to explore the Belly Button Biodiversity dataset using the D3 library. The dashboard will feature a horizontal bar chart with a dropdown menu to display the top 10 OTUs found in an individual, a bubble chart that displays each sample, and a display of sample metadata. The goal is to update all the plots and the metadata when a new sample is selected.
 
 # Technical Skills
@@ -22,3 +22,5 @@ In this project, I will be building an interactive dashboard to explore the Bell
 - Display the sample metadata, demographic information
 - Update all the plots when a new sample is selected
 - Deploy the app to a free static page hosting service like GitHub Pages.
+
+<img src="https://user-images.githubusercontent.com/109693942/212280370-2b65c121-3f68-48d4-8c9b-ec6740b5aca9.png" style="widt:500px; height:500px">
