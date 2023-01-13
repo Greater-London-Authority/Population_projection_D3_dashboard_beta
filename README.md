@@ -1,5 +1,5 @@
 ---
-permalink: /index.html
+permalink: StarterCode/index.html
 ---
 
 # Belly Button Biodiversity challenge
