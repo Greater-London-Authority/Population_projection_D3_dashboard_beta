@@ -4,7 +4,7 @@ In this project, I will be building an interactive dashboard to explore the Bell
 # Technical Skills
 - D3 library
 - JavaScript
-- HTML/CSS
+- HTML
 - Plotly.js
 
 # Project Parameters
