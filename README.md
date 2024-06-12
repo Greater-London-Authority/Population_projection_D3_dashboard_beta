@@ -1,28 +1,81 @@
-# D3 Dashboard (Belly Button Biodiversity) challenge
-In this project, I built an interactive dashboard to explore the Belly Button Biodiversity dataset using the D3 library in Javascript. The dashboard will feature a horizontal bar chart with a dropdown menu to display the top 10 OTUs found in an individual, a bubble chart that displays each sample, a display of sample metadata, and a gauge displaying Belly Button washing frequency per test subject. The goal is to update all the plots and the metadata when a new sample is selected.
+ Population-projection-D3-dashboard-beta
+Overview
+This project is a dashboard that visualises population projection data. The dashboard includes a sidebar with navigation links and a dropdown menu to select different datasets. The visualisation is created using D3.js.
 
-<img src="https://user-images.githubusercontent.com/109693942/212280370-2b65c121-3f68-48d4-8c9b-ec6740b5aca9.png" style="widt:500px; height:500px">
+Current Folder Structure
+project-folder/
+│
+├── package-lock.json # npm lock file
+├── package.json # npm package file
+│
+├── D3_dashboard_test/
+│ ├── index.html # Main HTML file
+│ ├── page1.html # Additional page 1
+│ ├── page2.html # Additional page 2
+│ ├── README.md # Project README file
+│ ├── samples.json # Sample JSON data
+│ ├── styles.css # CSS file for styling
+│ │
+│ ├── .vscode/
+│ │ └── settings.json # VS Code settings
+│ │
+│ ├── data/
+│ │ ├── merged_population_long_data.csv # CSV file containing population projection data
+│ │ └── samples.json # Additional sample JSON data
+│ │
+│ ├── Images/
+│ │ ├── database_url.png # Sample image
+│ │ └── GLA-Logo.png # Logo image used in the sidebar and as favicon
+│ │
+│ ├── python_scripts/
+│ │ └── projection_plotly.ipynb # Jupyter notebook with Plotly script
+│ │
+│ └── static/
+│ └── js/
+│ ├── .gitkeep # Keep directory structure in Git
+│ ├── app.js # JavaScript for main application logic
+│ ├── main.js # JavaScript for initialising and fetching data
+│ └── plots.js # JavaScript for plotting functions
 
-[Link](https://randiesinclair.github.io/belly-button-challenge/)
+Getting Started
+Prerequisites
+Node.js installed on your machine.
+Basic knowledge of HTML, CSS, and JavaScript.
+Familiarity with D3.js.
+Installation
+Clone the repository:
+git clone https://github.com/yourusername/your-repo-name.git```
+Running the Project
+Ensure you have a local server running. You can use simple servers like http-server or live-server. Install one of them globally if you haven't: npm install -g http-server
 
-# Technical Skills
-- D3 library
-- JavaScript
-- HTML
-- Plotly
+Start the server http-server
 
-# Project Parameters
-- Use D3 library to read in a JSON file from a specified URL
-- Create a horizontal bar chart with a dropdown menu to display the top 10 OTUs found in an individual.
-- Use sample_values as the values for the bar chart.
-- Use otu_ids as the labels for the bar chart.
-- Use otu_labels as the hovertext for the chart.
-- Create a bubble chart that displays each sample.
-- Use otu_ids for the x values.
-- Use sample_values for the y values.
-- Use sample_values for the marker size.
-- Use otu_ids for the marker colors.
-- Use otu_labels for the text values.
-- Display the sample metadata, demographic information
-- Update all the plots when a new sample is selected
-- Deploy the app to a free static page hosting service like GitHub Pages.
+Open your browser and navigate to http://127.0.0.1:8080.
+
+Usage
+The sidebar includes navigation links and a dropdown menu for dataset selection. The multi-line graph displays the population projections over the years. Code Structure index.html Contains the basic structure of the dashboard, including the sidebar, dropdown, and main content area for the graph.
+
+app.js
+Handles interactions and functionality related to the application, such as event listeners for the dropdown menu.
+
+plots.js
+Contains the functions for plots which is responsible for rendering the multi-line graph using D3.js.
+
+main.js
+Fetches the CSV data and initialises graphs by calling functions in plots.js.
+
+Data
+The data folder contains the CSV file merged_population_long_data.csv with population projection data. The data is expected to have the following format:
+year,projection,value
+2001,5yr,160922740.0
+
+Customisation
+CSS: Modify the styles in the <style> tags within index.html to customise the appearance of the dashboard. JavaScript: Modify app.js and plots.js to add or change functionality and data visualisation.
+
+Contributing
+Fork the repository.
+Create a new branch (git checkout -b feature-branch).
+Make your changes.
+Commit your changes (git commit -am 'Add new feature').
+Push to the branch (git push origin feature-branch).
+Create a new Pull Request.     
