@@ -69,8 +69,8 @@ Fetches the CSVs data and initialises graphs by calling functions in plots.js.
 
 ## Data
 The data folder contains the CSV file merged_population_long_data.csv with population projection data. The data is expected to have the following format:
-< br / >
-year,projection,value< br / >
+
+year,projection,value
 
 2001,5yr,160922740.0
 
