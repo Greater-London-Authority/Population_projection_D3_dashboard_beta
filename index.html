@@ -1,57 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Bellybutton Biodiversity</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Line Graph with D3.js</title>
+    <script src="static/js/main.js" defer></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="static/js/app.js" defer></script>
+    <script src="static/js/plots.js" defer></script>
+    <link rel="icon" type="image/png" href="images/GLA-Logo.png">
+    <style>
+        /* Your CSS styles here */
+        body {
+            display: flex;
+            font-family: Arial, sans-serif;
+        }
+        .sidebar {
+            width: 200px;
+            padding: 10px;
+            background-color: #f4f4f4;
+            border-right: 1px solid #ddd;
+        }
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+        }
+        .dropdown {
+            margin-bottom: 20px;
+        }
+        #multiLineGraph {
+            width: 800px;
+            height: 500px;
+        }
+        .nav-links a {
+            display: block;
+            margin: 10px 0;
+            color: #000;
+            text-decoration: none;
+        }
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+        .sidebar img {
+            width: 100%;
+            height: auto;
+            display: block;
+            margin-bottom: 20px;
+        }
+    </style>
 </head>
-
 <body>
-
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12 jumbotron text-center">
-        <h1>Belly Button Biodiversity Dashboard</h1>
-        <p>Use the interactive charts below to explore the dataset</p>
-      </div>
+    <div class="sidebar">
+        <img src="images/GLA-Logo.png" alt="GLA-Logo">
+        <h2>Population Projection Sidebar</h2>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="page1.html">Page 1</a>
+            <a href="page2.html">Page 2</a>
+        </div>
+        <p>Some sidebar content...</p>
     </div>
-      <div class="row">
-        <div class="col-md-2">
-          <div class="well">
-            <h5>Test Subject ID No.:</h5>
-            <select id="selDataset" onchange="optionChanged(this.value)"></select>
-          </div>
-          <div class="panel panel-primary">
-            <div class="panel-heading">
-              <h3 class="panel-title">Demographic Info</h3>
-            </div>
-            <div id="sample-metadata" class="panel-body"></div>
-          </div>
+    <div class="main-content">
+        <h1>Multi-Line Graph</h1>
+        <div class="dropdown">
+            <label for="dataSelector">Select Data:</label>
+            <select id="dataSelector">
+                <option value="dataset1">Dataset 1</option>
+                <option value="dataset2">Dataset 2</option>
+            </select>
         </div>
-        <div class="col-md-5">
-          <div id="bar"></div>
-        </div>
-        <div class="col-md-5">
-          <div id="gauge"></div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-12">
-          <div id="bubble"></div>
-        </div>
-      </div>
+        <div id="multiLineGraph"></div>
     </div>
-  
-    <script src="https://d3js.org/d3.v5.min.js"></script>
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-    <script src="./static/js/app.js"></script>
-    <!-- <script src="./static/js/plots.js"></script> -->
-    <!-- <script src="./static/js/bonus.js"></script> -->
-    
-  </body>
-  
-  </html>
-  
+</body>
+</html>

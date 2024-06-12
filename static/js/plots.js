@@ -1,154 +1,140 @@
-function buildMetadata(data, sample) {
-    var metadata = data.metadata;
-    var metadataArray = metadata.filter(sampleObj => sampleObj.id == sample);
-    var selectedSample = metadataArray[0];
-    var PANEL = d3.select("#sample-metadata");
-    // Clear PANEL before populating with new data
-    PANEL.html("");
-    Object.entries(selectedSample).forEach(([key, value]) => {
-        PANEL.append("h6").text(`${key}: ${value}`);
+// static/js/plots.js
+
+function plotMultiLineGraph(data) {
+    const margin = { top: 40, right: 80, bottom: 40, left: 50 },
+          width = 800 - margin.left - margin.right,
+          height = 500 - margin.top - margin.bottom;
+
+    // Remove any previous SVG elements
+    d3.select("#multiLineGraph").selectAll("*").remove();
+
+    const svg = d3.select("#multiLineGraph")
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    const parseYear = d3.timeParse("%Y");
+
+    data.forEach(d => {
+        d.year = parseYear(d.year);
+        d["5yr"] = +d["5yr"];
+        d["10yr"] = +d["10yr"];
+        d["15yr"] = +d["15yr"];
     });
-}
 
-function buildCharts(data, sample) {
-    var samples = data.samples;
-    var sampleArray = samples.filter(sampleObj => sampleObj.id == sample);
-    var metadataArray = data.metadata.filter(sampleObj => sampleObj.id == sample);
-    var selectedSample = sampleArray[0];
-    var otu_ids = selectedSample.otu_ids;
-    var otu_labels = selectedSample.otu_labels;
-    var sample_values = selectedSample.sample_values;
-    var wfreq = metadataArray[0].wfreq;
-    
-    // -------- BAR CHART -------------------------------------
-    // Create y labels with "OTU" preceding otu_id ie. OTU 1167
-    var yticks = otu_ids.slice(0,10).map(outId => `OTU ${outId}`).reverse();
-    var barData = [{
-        x: sample_values.slice(0,10).reverse(),
-        y: yticks,
-        type: "bar",
-        orientation: "h",
-        text: otu_labels.slice(0,10),
-    }];
-    var barLayout = {
-        title: "Top 10 OTUs per Sample"
-    };
-    Plotly.newPlot("bar", barData, barLayout);
-    // -------- BAR CHART -------------------------------------
-    
-    // -------- GAUGE CHART (combination scatter and Pie chart)-
-    // Trig to calc meter point
-    var degrees = 180 - wfreq * 20,
-        radius = .5;
-        var radians = degrees * Math.PI / 180;
-        var x = radius * Math.cos(radians);
-        var y = radius * Math.sin(radians);
-        var mainPath = 'M -.0 -0.025 L .0 0.025 L ',
-            pathX = String(x),
-            space = ' ',
-            pathY = String(y),
-            pathEnd = ' Z';
-        var path = mainPath.concat(pathX,space,pathY,pathEnd);
-        var gaugeData = [{
-            type: 'scatter',
-            x: [0], 
-            y:[0],
-            marker: {size: 28, color:'850000'},
-            showlegend: false,
-            name: 'scrubs per week',
-            text: wfreq,
-            hoverinfo: 'text+name'
-        },
-        { 
-            values: [50/9, 50/9, 50/9, 50/9, 50/9, 50/9, 50/9, 50/9, 50/9, 50],
-            rotation: 90,
-            text: ['8-9','7-8','6-7','5-6','4-5','3-4','2-3','1-2','0-1',''],
-            textinfo: 'text',
-            textposition:'inside',
-            marker: {colors:['rgba(14, 127, 0, .5)', 'rgba(110, 154, 22, .5)',
-            'rgba(170, 202, 42, .5)', 'rgba(202, 209, 95, .5)',
-            'rgba(210, 206, 145, .5)', 'rgba(232, 226, 202, .5)',
-            'rgba(240, 230, 215, .5)', 'rgba(255, 255, 255, 0)']},
-labels: ['8-9','7-8','6-7','5-6','4-5','3-4','2-3','1-2','0-1',''],
-hoverinfo: 'label',
-hole: .5,
-type: 'pie',
-showlegend: false
-}];
-var gaugeLayout = {
-shapes:[{
-type: 'path',
-path: path,
-fillcolor: '850000',
-line: {
-color: '850000'
-}
-}],
-title: 'Belly Button Washing Frequency<br>Scrubs per Week',
-height: 500,
-width: 500,
-xaxis: {
-zeroline:false, 
-showticklabels:false,
-showgrid: false, 
-range: [-1, 1]
-},
-yaxis: {
-zeroline:false, 
-showticklabels:false,
-showgrid: false, 
-range: [-1, 1]
-}
-};
-Plotly.newPlot("g
-Plotly.newPlot("gauge", gaugeData, gaugeLayout);
-// -------- GAUGE CHART -------------------------------------
+    const x = d3.scaleTime()
+        .domain(d3.extent(data, d => d.year))
+        .range([0, width]);
 
-// -------- BUBBLE CHART -------------------------------------
-var bubbleData = [{
-    x: otu_ids,
-    y: sample_values,
-    mode: "markers",
-    marker: {
-        size: sample_values,
-        color: otu_ids
-    },
-    text: otu_labels
-}];
-var bubbleLayout = {
-    xaxis: {title: "OTU ID"},
-    height: 600,
-    width: 1000
-};
-Plotly.newPlot("bubble", bubbleData, bubbleLayout);
-// -------- BUBBLE CHART -------------------------------------
+    const y = d3.scaleLinear()
+        .domain([0, d3.max(data, d => Math.max(d["5yr"], d["10yr"], d["15yr"]))])
+        .nice()
+        .range([height, 0]);
+
+    const line5yr = d3.line()
+        .x(d => x(d.year))
+        .y(d => y(d["5yr"]));
+
+    const line10yr = d3.line()
+        .x(d => x(d.year))
+        .y(d => y(d["10yr"]));
+
+    const line15yr = d3.line()
+        .x(d => x(d.year))
+        .y(d => y(d["15yr"]));
+
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x).ticks(d3.timeYear.every(1)).tickFormat(d3.timeFormat("%Y")));
+
+    svg.append("g")
+        .attr("class", "y axis")
+        .call(d3.axisLeft(y));
+
+    svg.append("g")
+        .attr("class", "grid")
+        .attr("transform", "translate(0," + height + ")")
+        .call(d3.axisBottom(x)
+            .tickSize(-height)
+            .tickFormat(""));
+
+    svg.append("g")
+        .attr("class", "grid")
+        .call(d3.axisLeft(y)
+            .tickSize(-width)
+            .tickFormat(""));
+
+    svg.append("path")
+        .datum(data)
+        .attr("class", "line")
+        .attr("d", line5yr)
+        .style("stroke", "steelblue")
+        .style("fill", "none");
+
+    svg.append("path")
+        .datum(data)
+        .attr("class", "line")
+        .attr("d", line10yr)
+        .style("stroke", "red")
+        .style("fill", "none");
+
+    svg.append("path")
+        .datum(data)
+        .attr("class", "line")
+        .attr("d", line15yr)
+        .style("stroke", "green")
+        .style("fill", "none");
+
+    // Add legends
+    svg.append("text")
+        .attr("x", width - 10)
+        .attr("y", y(data[data.length - 1]["5yr"]))
+        .attr("dy", ".35em")
+        .style("fill", "steelblue")
+        .style("font-size", "12px")
+        .text("5yr");
+
+    svg.append("text")
+        .attr("x", width - 10)
+        .attr("y", y(data[data.length - 1]["10yr"]))
+        .attr("dy", ".35em")
+        .style("fill", "red")
+        .style("font-size", "12px")
+        .text("10yr");
+
+    svg.append("text")
+        .attr("x", width - 10)
+        .attr("y", y(data[data.length - 1]["15yr"]))
+        .attr("dy", ".35em")
+        .style("fill", "green")
+        .style("font-size", "12px")
+        .text("15yr");
+
+    // Add axis labels
+    svg.append("text")
+        .attr("class", "x label")
+        .attr("text-anchor", "end")
+        .attr("x", width)
+        .attr("y", height - 6)
+        .text("Year");
+
+    svg.append("text")
+        .attr("class", "y label")
+        .attr("text-anchor", "end")
+        .attr("y", 6)
+        .attr("dy", ".75em")
+        .attr("transform", "rotate(-90)")
+        .text("Population");
+
+    // Add title
+    svg.append("text")
+        .attr("x", (width / 2))
+        .attr("y", 0 - (margin.top / 2))
+        .attr("text-anchor", "middle")
+        .style("font-size", "16px")
+        .style("text-decoration", "underline")
+        .text("Population Projections");
 }
-
-function optionChanged(sample) {
-const url = "https://2u-data-curriculum-team.s3.amazonaws.com/dataviz-classroom/v1.1/14-Interactive-Web-Visualizations/02-Homework/samples.json";
-d3.json(url).then(data => {
-    buildMetadata(data, sample);
-    buildCharts(data, sample);
-});
-}
-
-function init() {
-var selector = d3.select("#selDataset");
-const url = "https://2u-data-curriculum-team.s3.amazonaws.com/dataviz-classroom/v1.1/14-Interactive-Web-Visualizations/02-Homework/samples.json";
-d3.json(url).then(data => {
-    var sampleNames = data.names;
-    sampleNames.forEach(sample => {
-        selector
-            .append("option")
-            .text(sample)
-            .property("value", sample);
-    });
-    var initialSample = sampleNames[0];
-    buildMetadata(data, initialSample);
-    buildCharts(data, initialSample);
-});
-}
-
-init();
-
-      

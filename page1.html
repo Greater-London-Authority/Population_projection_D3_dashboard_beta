@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page 1</title>
+    <style>
+        body {
+            display: flex;
+            font-family: Arial, sans-serif;
+        }
+        .sidebar {
+            width: 200px;
+            padding: 10px;
+            background-color: #f4f4f4;
+            border-right: 1px solid #ddd;
+        }
+        .main-content {
+            flex-grow: 1;
+            padding: 20px;
+        }
+        .nav-links a {
+            display: block;
+            margin: 10px 0;
+            color: #000;
+            text-decoration: none;
+        }
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Sidebar</h2>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="page2.html">Page 2</a>
+        </div>
+        <p>Some sidebar content...</p>
+    </div>
+    <div class="main-content">
+        <h1>Page 1 Content</h1>
+        <p>This is the content for Page 1.</p>
+    </div>
+</body>
+</html>
