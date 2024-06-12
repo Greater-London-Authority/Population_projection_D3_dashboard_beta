@@ -65,11 +65,13 @@ Handles interactions and functionality related to the application, such as event
 Contains the functions for plots which is responsible for rendering the multi-line graph using D3.js.
 
 ## main.js
-Fetches the CSV data and initialises graphs by calling functions in plots.js.
+Fetches the CSVs data and initialises graphs by calling functions in plots.js.
 
 ## Data
 The data folder contains the CSV file merged_population_long_data.csv with population projection data. The data is expected to have the following format:
-year,projection,value
+< br / >
+year,projection,value< br / >
+
 2001,5yr,160922740.0
 
 ## Customisation
