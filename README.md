@@ -42,10 +42,11 @@ project-folder/
 
 ## Getting Started
 Prerequisites
-Node.js installed on your machine.
-Basic knowledge of HTML, CSS, and JavaScript.
-Familiarity with D3.js.
-Installation
+1. Node.js installed on your machine.
+2. Basic knowledge of HTML, CSS, and JavaScript.
+3. Familiarity with D3.js.
+
+## Installation
 Clone the repository:
 ```git clone https://github.com/yourusername/your-repo-name.git```
 Running the Project
