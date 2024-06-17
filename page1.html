@@ -3,7 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Page 1</title>
+    <title>Multi-Line Graph with Plotly</title>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="static/js/main.js" defer></script>
+    <script src="static/js/d3_plots.js" defer></script>
+    <script src="static/js/plotly_plots.js" defer></script>
     <style>
         body {
             display: flex;
@@ -19,15 +24,6 @@
             flex-grow: 1;
             padding: 20px;
         }
-        .nav-links a {
-            display: block;
-            margin: 10px 0;
-            color: #000;
-            text-decoration: none;
-        }
-        .nav-links a:hover {
-            text-decoration: underline;
-        }
     </style>
 </head>
 <body>
@@ -40,8 +36,9 @@
         <p>Some sidebar content...</p>
     </div>
     <div class="main-content">
-        <h1>Page 1 Content</h1>
-        <p>This is the content for Page 1.</p>
+        <h1>Page 1 - Plotly Graph</h1>
+        <div id="multiLineGraph"></div>
+        <div id="table-container"></div>
     </div>
 </body>
 </html>
