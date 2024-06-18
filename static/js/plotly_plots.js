@@ -1,21 +1,33 @@
 function plotMultiLineGraphPlotly(data) {
-    const years = data.map(d => d.year);
-    const projectionNames = ['5yr', '10yr', '15yr'];
+    // Get unique years
+    const years = Array.from(new Set(data.map(d => d.year)));
+
+    // Get unique projection names
+    const projectionNames = Array.from(new Set(data.map(d => d.projection)));
+
+    // Initialise projections object
     const projections = {};
-
     projectionNames.forEach(name => {
-        projections[name] = data.map(d => +d[name]);
+        projections[name] = years.map(year => {
+            // Find the data entry for the current year and projection
+            const entry = data.find(d => d.year === year && d.projection === name);
+            // Return the value or NaN if not found
+            return entry ? entry.value : NaN;
+        });
     });
 
-    const traces = projectionNames.map(name => {
-        return {
-            x: years,
-            y: projections[name],
-            mode: 'markers+lines',
-            name: name
-        };
-    });
+    // Log the projections object for debugging
+    console.log('Projections:', projections);
 
+    // Prepare traces for Plotly
+    const traces = projectionNames.map(name => ({
+        x: years,
+        y: projections[name],
+        mode: 'markers+lines',
+        name: name
+    }));
+
+    // Define the shapes
     const shapes = [
         {
             type: 'line',
@@ -31,6 +43,7 @@ function plotMultiLineGraphPlotly(data) {
         }
     ];
 
+    // Define the layout
     const layout = {
         title: 'Population Projections',
         xaxis: {
@@ -43,5 +56,7 @@ function plotMultiLineGraphPlotly(data) {
         shapes: shapes
     };
 
+    // Plot the graph using Plotly
     Plotly.newPlot('multiLineGraph', traces, layout);
 }
+
