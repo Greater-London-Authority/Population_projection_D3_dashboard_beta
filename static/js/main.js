@@ -1,42 +1,91 @@
-// Assuming you are working in a browser environment, you can use the fetch API to fetch the CSV file and then parse it using d3.csvParse. Here is an example:
+document.addEventListener('DOMContentLoaded', () => {
+  fetch('data/merged_population_long_data.csv')
+    .then(response => response.text())
+    .then(csvData => {
+      // Parse the CSV data using D3
+      const data = d3.csvParse(csvData);
 
-// Fetch the CSV file
-fetch('data/merged_population_long_data.csv')
-  .then(response => response.text())
-  .then(csvData => {
-    // Parse the CSV data
-    const data = d3.csvParse(csvData);
+      // Convert 'year' and 'value' from string to number
+      const cleanedData = data.map(d => ({
+        year: parseInt(d.year, 10),  // Convert 'year' to number
+        projection: d.projection,
+        value: parseFloat(d.value)  // Convert 'value' to number
+      })).filter(d => !isNaN(d.year) && !isNaN(d.value));  // Filter out NaN values
 
-    // Log the parsed data (for demonstration)
-    console.log(data);
+      // Display the initial table and plot
+      displayDataAsTable(cleanedData);
+      plotMultiLineGraphPlotly(cleanedData);
 
-    // Now you can use this data for plotting or any other purpose
-    // For example, you can call your plotMultiLineGraph function passing this data
-    plotMultiLineGraph(data);
-  })
-  .catch(error => {
-    console.error('Error fetching or parsing data:', error);
+      // Add event listener to the projection dropdown
+      const projectionSelect = document.getElementById('projectionSelect');
+      projectionSelect.addEventListener('change', () => {
+        const selectedProjection = projectionSelect.value;
+        let filteredData = cleanedData;
+        if (selectedProjection !== 'all') {
+          filteredData = cleanedData.filter(d => d.projection === selectedProjection);
+        }
+        displayDataAsTable(filteredData);
+        plotMultiLineGraphPlotly(filteredData);
+      });
+
+      // Add event listener to the export CSV button
+      const exportCsvBtn = document.getElementById('exportCsvBtn');
+      exportCsvBtn.addEventListener('click', () => {
+        exportToCsv(cleanedData, 'population_projections.csv');
+      });
+
+    })
+    .catch(error => {
+      console.error('Error fetching or parsing data:', error);
+    });
+});
+
+function displayDataAsTable(data) {
+// Select the element where you want to append the table
+const tableContainer = document.getElementById('table-container');
+
+// Clear any existing content in the table container
+tableContainer.innerHTML = '';
+
+// Create a table element
+const table = document.createElement('table');
+
+// Create table headers (assuming first object in data has headers)
+const headers = Object.keys(data[0]);
+const headerRow = document.createElement('tr');
+headers.forEach(headerText => {
+  const th = document.createElement('th');
+  th.textContent = headerText;
+  headerRow.appendChild(th);
+});
+table.appendChild(headerRow);
+
+// Create rows for each data entry
+data.forEach(item => {
+  const row = document.createElement('tr');
+  headers.forEach(headerText => {
+    const td = document.createElement('td');
+    td.textContent = item[headerText];
+    row.appendChild(td);
   });
-// This code fetches the CSV file using the fetch API. The response is then converted to text using response.text(). Then, the text data is parsed using d3.csvParse. The parsed data is then logged to the console for demonstration purposes. Finally, the data can be used for plotting or any other purpose. In this example, it is assumed that there is a function plotMultiLineGraph(data) that can be called to plot a multi-line graph using the parsed data.
+  table.appendChild(row);
+});
 
-// You can replace the plotMultiLineGraph function with your own function that processes the data and creates the desired visualization. Additionally, you can add error handling to catch any errors that may occur during fetching or parsing the data.
+// Append the table to the container
+tableContainer.appendChild(table);
+}
 
-// Here is the complete code snippet:
+function exportToCsv(data, filename) {
+const csvContent = [
+  Object.keys(data[0]).join(','), // header row
+  ...data.map(row => Object.values(row).join(',')) // data rows
+].join('\n');
 
-// Fetch the CSV file
-fetch('data/merged_population_long_data.csv')
-  .then(response => response.text())
-  .then(csvData => {
-    // Parse the CSV data
-    const data = d3.csvParse(csvData);
-
-    // Log the parsed data (for demonstration)
-    console.log(data);
-
-    // Now you can use this data for plotting or any other purpose
-    // For example, you can call your plotMultiLineGraph function passing this data
-    plotMultiLineGraph(data);
-  })
-  .catch(error => {
-    console.error('Error fetching or parsing data:', error);
-  });
+const blob = new Blob([csvContent], { type: 'text/csv' });
+const link = document.createElement('a');
+link.href = URL.createObjectURL(blob);
+link.download = filename;
+document.body.appendChild(link);
+link.click();
+document.body.removeChild(link);
+}

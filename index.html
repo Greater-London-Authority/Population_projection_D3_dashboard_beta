@@ -7,7 +7,8 @@
     <script src="static/js/main.js" defer></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="static/js/app.js" defer></script>
-    <script src="static/js/plots.js" defer></script>
+    <script src="static/js/plotly_plots.js" defer></script>
+    <script src="static/js/d3_plots.js" defer></script>
     <link rel="icon" type="image/png" href="images/GLA-Logo.png">
     <style>
         /* Your CSS styles here */
@@ -62,14 +63,7 @@
     </div>
     <div class="main-content">
         <h1>Multi-Line Graph</h1>
-        <div class="dropdown">
-            <label for="dataSelector">Select Data:</label>
-            <select id="dataSelector">
-                <option value="dataset1">Dataset 1</option>
-                <option value="dataset2">Dataset 2</option>
-            </select>
-        </div>
-        <div id="multiLineGraph"></div>
+        <div id="plotMultiLineGraphD3"></div>
     </div>
 </body>
 </html>
