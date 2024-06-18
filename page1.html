@@ -24,6 +24,9 @@
             flex-grow: 1;
             padding: 20px;
         }
+        .controls {
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
@@ -37,6 +40,16 @@
     </div>
     <div class="main-content">
         <h1>Page 1 - Plotly Graph</h1>
+        <div class="controls">
+            <label for="projectionSelect">Select Projection:</label>
+            <select id="projectionSelect">
+                <option value="5yr">5yr</option>
+                <option value="10yr">10yr</option>
+                <option value="15yr">15yr</option>
+                <option value="all">All</option>
+            </select>
+            <button id="exportCsvBtn">Export CSV</button>
+        </div>
         <div id="multiLineGraph"></div>
         <div id="table-container"></div>
     </div>
