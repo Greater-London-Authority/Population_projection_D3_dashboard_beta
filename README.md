@@ -1,7 +1,7 @@
 # Population-projection-D3-dashboard-beta
 ---
 ## Overview
-This project is a dashboard that visualises population projection data. The dashboard includes a sidebar with navigation links and a dropdown menu to select different datasets. The visualisation is created using D3.js.
+This project is a dashboard that visualises population projection data. The dashboard is a work in progress with new features under development. The visualisations are created using D3.js and Plotly.js.
 
 ## Current Folder Structure
 ```
